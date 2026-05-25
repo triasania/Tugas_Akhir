@@ -75,7 +75,7 @@ if df is not None:
         daftar_jurusan = sorted([str(j).strip() for j in df['jurusan'].unique() if pd.notna(j) and str(j).lower() != 'nan' and str(j).strip() != ''])
         user_jurusan = st.selectbox("Pilih Jurusan Anda:", daftar_jurusan)
     with col2:
-        query = st.text_input("Ketik Topik/Mata Kuliah:", placeholder="Contoh: Matematika, Data Science, Bisnis...")
+        query = st.text_input("Ketik Topik/Mata Kuliah:", placeholder="Contoh: Statistika, Lingkungan, Seni...")
 
     # 5. Tombol Cari
     if st.button("Cari Rekomendasi", type="primary", use_container_width=True):
