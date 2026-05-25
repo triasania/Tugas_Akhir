@@ -66,7 +66,7 @@ if df is not None:
     st.markdown("### 🔍 Filter Pencarian")
     col1, col2 = st.columns(2)
     with col1:
-        daftar_jurusan = sorted(df['jurusan'].unique())
+        daftar_jurusan = sorted([str(j).strip() for j in df['jurusan'].unique() if pd.notna(j) and str(j).lower() != 'nan' and str(j).strip() != ''])
         user_jurusan = st.selectbox("Pilih Jurusan Anda:", daftar_jurusan)
     with col2:
         query = st.text_input("Ketik Topik/Mata Kuliah:", placeholder="Contoh: Matematika, Data Science, Bisnis...")
