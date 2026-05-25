@@ -4,7 +4,7 @@ import base64
 from sistem_rekomendasi_buat_sidang import load_system, get_recommendations
 
 # 1. Konfigurasi Halaman
-st.set_page_config(page_title="Rekomendasi Matkul ITB", page_icon="🎓", layout="wide")
+st.set_page_config(page_title="Rekomendasi Mata Kuliah ITB", page_icon="🐘", layout="wide")
 
 # Fungsi Background & Glassmorphism
 def set_background(image_file):
@@ -54,7 +54,7 @@ with col_logo:
         st.warning("Logo belum ada.")
 
 with col_title:
-    st.title("Sistem Rekomendasi Mata Kuliah ITB")
+    st.title("Sistem Rekomendasi Mata Kuliah Strata 1 Institut Teknologi Bandung")
     st.write("Temukan mata kuliah pilihan berdasarkan silabus, jurusan pemberi, dan jadwal kelas.")
 
 st.divider()
