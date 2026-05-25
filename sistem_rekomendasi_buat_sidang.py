@@ -336,6 +336,31 @@ def text_preprocessing(text):
     clean_words = [w for w in words if w not in list_stopwords and len(w) > 2]
     return " ".join(clean_words)
 
+def ringkas_jadwal_six(teks):
+    if pd.isna(teks) or teks == '-':
+        return str(teks)
+        
+    baris_kelas = str(teks).split('\n')
+    hasil_akhir = []
+    
+    for kelas in baris_kelas:
+        if ":" not in kelas:
+            hasil_akhir.append(kelas)
+            continue
+            
+        nama_kelas_dosen, isi_jadwal = kelas.split(":", 1)
+        pola = r'(Senin|Selasa|Rabu|Kamis|Jumat|Sabtu)\s*/\s*[\d\sA-Za-z]+\s*/\s*(\d{2}\.\d{2}\s*-\s*\d{2}\.\d{2})\s*/\s*([^/]+)\s*/\s*(Kuliah|Tutorial)'
+        temuan = re.findall(pola, isi_jadwal)
+        
+        if temuan:
+            jadwal_unik = list(dict.fromkeys([f"{hari} {jam} (R. {ruang.strip()})" for hari, jam, ruang, jenis in temuan]))
+            jadwal_ringkas = " | ".join(jadwal_unik)
+            hasil_akhir.append(f"{nama_kelas_dosen.strip()}: {jadwal_ringkas}")
+        else:
+            hasil_akhir.append(f"{nama_kelas_dosen.strip()}: (Jadwal tidak terdeteksi)")
+            
+    return "\n".join(hasil_akhir)
+
 def load_system():
     print("--- INISIALISASI SISTEM ---")
     if not os.path.exists(FILE_DATASET):
@@ -344,6 +369,10 @@ def load_system():
 
     print("1. Membaca CSV...")
     df = pd.read_csv(FILE_DATASET)
+    
+    if 'jadwal_lengkap' in df.columns:
+        df['jadwal_lengkap'] = df['jadwal_lengkap'].apply(ringkas_jadwal_six)
+        
     df['kode_matkul'] = df['kode_matkul'].astype(str).str.strip()
     df['nama_matkul'] = df['nama_matkul'].astype(str).str.strip()
     df['jurusan'] = df['jurusan'].astype(str).str.strip()
