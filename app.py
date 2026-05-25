@@ -19,15 +19,26 @@ def set_background(image_file):
             background-position: center;
             background-attachment: fixed;
         }}
+        
+        /* Tema Terang (Default) */
         .block-container {{
-            background: rgba(255, 255, 255, 0.93);
+            background: rgba(255, 255, 255, 0.75);
             padding: 3rem;
             border-radius: 20px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
             margin-top: 2rem;
             margin-bottom: 6rem;
         }}
-        /* Membuat teks di dalam tabel bisa multi-line (untuk jadwal) */
+
+        /* Tema Gelap (Night Mode) */
+        @media (prefers-color-scheme: dark) {{
+            .block-container {{
+                background: rgba(15, 15, 15, 0.85); /* Berubah jadi hitam transparan */
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            }}
+        }}
+        
+        /* Membuat teks di dalam tabel bisa multi-line */
         [data-testid="stTable"] td {{
             white-space: pre-wrap !important;
         }}
@@ -119,12 +130,13 @@ if df is not None:
 # 6. Copyright Footer
 footer_html = """
 <style>
+/* Tema Terang (Default) */
 .footer {
     position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(250, 250, 250, 0.95);
     color: #333;
     text-align: center;
     padding: 12px 0;
@@ -139,6 +151,18 @@ footer_html = """
     font-style: italic;
     margin-bottom: 4px;
 }
+
+/* Tema Gelap (Night Mode) */
+@media (prefers-color-scheme: dark) {
+    .footer {
+        background-color: rgba(20, 20, 20, 0.95);
+        color: #eee;
+        border-top: 1px solid #444;
+    }
+    .disclaimer {
+        color: #aaa;
+    }
+}
 </style>
 <div class="footer">
     <div class="disclaimer">*Disclaimer: Data jadwal diambil dari Semester 1 2025/2026 dan Semester 2 2025/2026.</div>
@@ -146,4 +170,5 @@ footer_html = """
     di bawah bimbingan <b>Prof. Edy Tri Baskoro, S.Si., M.Sc., Ph.D.</b>
 </div>
 """
+st.markdown(footer_html, unsafe_allow_html=True)
 st.markdown(footer_html, unsafe_allow_html=True)
