@@ -23,7 +23,7 @@ def set_background(image_file):
             background: rgba(255, 255, 255, 0.93);
             padding: 3rem;
             border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
             margin-top: 2rem;
             margin-bottom: 6rem;
         }}
