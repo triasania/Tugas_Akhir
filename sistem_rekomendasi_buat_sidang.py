@@ -508,7 +508,7 @@ def get_recommendations(query, user_jurusan, df, vec_nama, mat_nama, vec_deskrip
             "Mata Kuliah": item["Mata Kuliah"],
             "Jurusan Asal": item["Jurusan Asal"],
             "Kategori": item["Kategori"],
-            "Jadwal Kelas": item["jadwal_matkul"],
+            "Jadwal Kelas": item["jadwal_lengkap"],
             "Link Silabus": item["url"]
         })
 
