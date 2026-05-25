@@ -23,7 +23,7 @@ def set_background(image_file):
             background: rgba(255, 255, 255, 0.93);
             padding: 3rem;
             border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
             margin-top: 2rem;
             margin-bottom: 6rem;
         }}
@@ -43,9 +43,15 @@ set_background("gedung_itb.jpg")
 col_logo, col_title = st.columns([1, 7])
 with col_logo:
     try:
-        st.image("logo_itb.png", width=110)
-    except:
-        pass
+        # Trik HTML Base64 agar logo HD tidak di-compress oleh Streamlit
+        with open("logo_itb.png", "rb") as f:
+            logo_encoded = base64.b64encode(f.read()).decode()
+        
+        # Atur lebar (width) di sini, misal 110px atau 120px
+        html_logo = f'<img src="data:image/png;base64,{logo_encoded}" style="width: 110px; height: auto;">'
+        st.markdown(html_logo, unsafe_allow_html=True)
+    except FileNotFoundError:
+        st.warning("Logo belum ada.")
 
 with col_title:
     st.title("Sistem Rekomendasi Mata Kuliah ITB")
