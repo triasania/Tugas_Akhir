@@ -127,14 +127,21 @@ footer_html = """
     background-color: rgba(255, 255, 255, 0.95);
     color: #333;
     text-align: center;
-    padding: 15px 0;
+    padding: 12px 0;
     font-size: 13px;
     border-top: 1px solid #ccc;
     z-index: 1000;
-    line-height: 1.6;
+    line-height: 1.5;
+}
+.disclaimer {
+    font-size: 11px;
+    color: #666;
+    font-style: italic;
+    margin-bottom: 4px;
 }
 </style>
 <div class="footer">
+    <div class="disclaimer">*Disclaimer: Data jadwal diambil dari Semester 1 2025/2026 dan Semester 2 2025/2026.</div>
     Dibuat untuk memenuhi Tugas Akhir <b>Tria Sania Oktavia (10122036)</b><br>
     di bawah bimbingan <b>Prof. Edy Tri Baskoro, S.Si., M.Sc., Ph.D.</b>
 </div>
