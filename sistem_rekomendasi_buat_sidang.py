@@ -502,13 +502,16 @@ def get_recommendations(query, user_jurusan, df, vec_nama, mat_nama, vec_deskrip
     # E. Ambil Top N dan Susun Hasil Akhir (Sembunyikan Skor, Buat Ranking)
     final_results = []
     for rank, item in enumerate(temp_results[:top_n], start=1):
+        baris_asli = df[df['kode_matkul'] == item["Kode"]].iloc[0]
+        jadwal_matkul = baris_asli.get('jadwal_lengkap', '-')
+        
         final_results.append({
             "Ranking": rank,
             "Kode": item["Kode"],
             "Mata Kuliah": item["Mata Kuliah"],
             "Jurusan Asal": item["Jurusan Asal"],
             "Kategori": item["Kategori"],
-            "Jadwal Kelas": item["jadwal_lengkap"],
+            "Jadwal Kelas": jadwal_matkul,
             "Link Silabus": item["url"]
         })
 
