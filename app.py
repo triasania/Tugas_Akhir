@@ -57,18 +57,15 @@ with col_logo:
         # Trik HTML Base64 agar logo HD tidak di-compress oleh Streamlit
         with open("logo_itb.png", "rb") as f:
             logo_encoded = base64.b64encode(f.read()).decode()
-        
-        # Atur lebar (width) di sini, misal 110px atau 120px
         html_logo = f'<img src="data:image/png;base64,{logo_encoded}" style="width: 110px; height: auto;">'
         st.markdown(html_logo, unsafe_allow_html=True)
     except FileNotFoundError:
-        st.warning("Logo belum ada.")
+        pass
 
 with col_title:
-    st.title("Sistem Rekomendasi Mata Kuliah Strata 1 Institut Teknologi Bandung")
+    st.title("Sistem Rekomendasi Mata Kuliah ITB")
     st.write("Temukan mata kuliah pilihan berdasarkan silabus, jurusan pemberi, dan jadwal kelas.")
-
-st.divider()
+    st.info("🧠 **Mesin Rekomendasi AI:** Ditenagai oleh ekstraksi fitur **TF-IDF** (Term Frequency-Inverse Document Frequency) dan perhitungan jarak **Cosine Similarity**.")
 
 # 3. Init System
 @st.cache_resource
