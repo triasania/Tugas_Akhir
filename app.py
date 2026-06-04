@@ -104,7 +104,7 @@ if df is not None:
                 mat_nama=m_nama, 
                 vec_deskripsi=v_deskripsi, 
                 mat_deskripsi=m_deskripsi, 
-                top_n=20 # <--- Diubah jadi 20 agar pas menjadi 2 halaman (10 per halaman)
+                top_n=30
             )
             # Simpan ke memori Streamlit
             st.session_state.hasil_rekomendasi = hasil
