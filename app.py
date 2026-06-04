@@ -87,11 +87,19 @@ if df is not None:
         user_jurusan = st.selectbox("Pilih Jurusan Anda:", daftar_jurusan)
     with col2:
         query = st.text_input("Ketik Topik/Mata Kuliah:", placeholder="Contoh: Statistika, Lingkungan, Seni...")
+        
+# 5. Tombol Cari dan Session State (Ingatan Memori)
+    # Membuat memori agar hasil pencarian dan halaman tidak hilang saat tombol next ditekan
+    if 'hasil_rekomendasi' not in st.session_state:
+        st.session_state.hasil_rekomendasi = pd.DataFrame()
+    if 'current_page' not in st.session_state:
+        st.session_state.current_page = 1
+    if 'query_terakhir' not in st.session_state:
+        st.session_state.query_terakhir = ""
 
-    # 5. Tombol Cari
     if st.button("Cari Rekomendasi", type="primary", use_container_width=True):
         if query:
-            hasil_rekomendasi = get_recommendations(
+            hasil = get_recommendations(
                 query=query, 
                 user_jurusan=user_jurusan, 
                 df=df, 
@@ -99,35 +107,71 @@ if df is not None:
                 mat_nama=m_nama, 
                 vec_deskripsi=v_deskripsi, 
                 mat_deskripsi=m_deskripsi, 
-                top_n=15
+                top_n=20 # <--- Diubah jadi 20 agar pas menjadi 2 halaman (10 per halaman)
             )
-            
-            if not hasil_rekomendasi.empty:
-                st.markdown(f"#### ✅ Rekomendasi untuk: **'{query}'**")
-                
-                # TAMPILAN TABEL DENGAN JADWAL
-                st.dataframe(
-                    hasil_rekomendasi,
-                    width='stretch',
-                    column_config={
-                        "Jadwal Kelas": st.column_config.TextColumn(
-                            "Jadwal & Dosen",
-                            help="Daftar kelas, dosen pengampu, dan jadwal mingguan",
-                            width="large",
-                        ),
-                        "Link Silabus": st.column_config.LinkColumn(
-                            "SIX ITB", 
-                            display_text="Lihat Silabus 🔗"
-                        )
-                    },
-                    hide_index=False # Agar ranking tetap terlihat di paling kiri
-                )
-            else:
-                st.warning("Tidak ditemukan mata kuliah yang relevan.")
+            # Simpan ke memori Streamlit
+            st.session_state.hasil_rekomendasi = hasil
+            st.session_state.query_terakhir = query
+            st.session_state.current_page = 1 # Reset ke halaman 1 setiap kali cari baru
         else:
             st.warning("Silakan masukkan kata kunci.")
 
-# 6. Copyright Footer
+    # 6. Tampilkan Tabel dengan Fitur Pagination
+    df_hasil = st.session_state.hasil_rekomendasi
+    
+    if not df_hasil.empty:
+        st.markdown(f"#### ✅ Rekomendasi untuk: **'{st.session_state.query_terakhir}'**")
+        
+        # --- LOGIKA PAGINATION ---
+        items_per_page = 10
+        total_pages = (len(df_hasil) - 1) // items_per_page + 1
+        
+        # Memotong tabel sesuai dengan halaman saat ini
+        start_idx = (st.session_state.current_page - 1) * items_per_page
+        end_idx = start_idx + items_per_page
+        df_tampil = df_hasil.iloc[start_idx:end_idx]
+        
+        # TAMPILAN TABEL
+        st.dataframe(
+            df_tampil,
+            width='stretch',
+            column_config={
+                "Jadwal Kelas": st.column_config.TextColumn(
+                    "Jadwal & Dosen",
+                    help="Daftar kelas, dosen pengampu, dan jadwal mingguan",
+                    width="large",
+                ),
+                "Link Silabus": st.column_config.LinkColumn(
+                    "SIX ITB", 
+                    display_text="Lihat Silabus 🔗"
+                )
+            },
+            hide_index=False 
+        )
+        
+        # --- TOMBOL NAVIGASI BAWAH TABEL ---
+        st.write("") # Memberi sedikit jarak
+        col_prev, col_page, col_next = st.columns([1, 2, 1])
+        
+        with col_prev:
+            if st.button("⬅️ Sebelumnya", use_container_width=True, disabled=(st.session_state.current_page == 1)):
+                st.session_state.current_page -= 1
+                st.rerun() # Memaksa web me-refresh untuk pindah halaman
+                
+        with col_page:
+            # Teks penunjuk halaman di tengah
+            st.markdown(f"<div style='text-align: center; padding-top: 6px; font-size: 15px;'>Halaman <b>{st.session_state.current_page}</b> dari <b>{total_pages}</b></div>", unsafe_allow_html=True)
+            
+        with col_next:
+            if st.button("Selanjutnya ➡️", use_container_width=True, disabled=(st.session_state.current_page == total_pages)):
+                st.session_state.current_page += 1
+                st.rerun()
+                
+    elif st.session_state.query_terakhir != "":
+        # Jika hasil kosong tapi query sudah diketik
+        st.warning("Tidak ditemukan mata kuliah yang relevan.")
+        
+# 7. Copyright Footer
 footer_html = """
 <style>
 /* Tema Terang (Default) */
