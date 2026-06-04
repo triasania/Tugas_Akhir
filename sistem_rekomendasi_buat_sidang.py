@@ -313,7 +313,7 @@ list_stopwords.extend([
     "mahasiswa", "mampu", "memahami", "menjelaskan", "menggunakan",
     "capaian", "pembelajaran", "bahan", "kajian", "kuliah", "mata",
     "prasyarat", "deskripsi", "topik", "konsep", "dasar", "teori",
-    "metode", "penerapan", "aplikasi", "analisis", "serta"
+    "metode", "penerapan", "aplikasi", "serta"
 ])
 
 # ==========================================
